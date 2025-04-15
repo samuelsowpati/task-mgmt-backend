@@ -72,15 +72,41 @@ const getGroupedTasks = async (req, res) => {
             buildingGroups.get(building).push({
                 name: task.name,
                 status: task.status,
-                taskId: task._id
+                taskId: task._id,
+                loc: {
+                    lat: task.location.lat,
+                    long: task.location.long
+                }
             });
         });
         
-        // Convert map to array format
-        const result = Array.from(buildingGroups.entries()).map(([building, tasks]) => ({
-            name: building,
-            tasks
-        }));
+        // Convert map to array format and calculate average location for each building
+        const result = Array.from(buildingGroups.entries()).map(([building, tasks]) => {
+            // Calculate average lat and long
+            let totalLat = 0;
+            let totalLong = 0;
+            let validLocationCount = 0;
+            
+            tasks.forEach(task => {
+                if (task.loc && task.loc.lat != null && task.loc.long != null) {
+                    totalLat += task.loc.lat;
+                    totalLong += task.loc.long;
+                    validLocationCount++;
+                }
+            });
+            
+            // Avoid division by zero
+            const avgLoc = validLocationCount > 0 ? {
+                lat: totalLat / validLocationCount,
+                long: totalLong / validLocationCount
+            } : { lat: null, long: null };
+            
+            return {
+                name: building,
+                tasks,
+                avgloc: avgLoc
+            };
+        });
         
         res.json(result);
     } catch (error) {
