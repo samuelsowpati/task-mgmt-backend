@@ -10,6 +10,7 @@ const cors = require("cors");
 const gptRoutes = require('./routes/gptRoutes');
 const authRoutes = require('./routes/authRoutes');
 const userTaskRoutes = require('./routes/userTaskRoutes');
+const textbeltRoutes = require('./routes/textRoute');
 //importing environment variables
 // const uname = process.env.USERNAME1;
 // const pass = process.env.PASSWORD1;
@@ -34,5 +35,5 @@ app.use('/', gptRoutes);
 app.use('/', authRoutes);
 
 app.use('/', userTaskRoutes);
-
+app.use('/', textbeltRoutes);
 app.listen(3000);

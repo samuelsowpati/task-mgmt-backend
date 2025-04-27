@@ -11,11 +11,16 @@ const UserSchema = mongoose.Schema(
             type: String,
             required: [true, 'Password is required'],
         },
+        phone: {
+            type: String,
+            required: [true, 'Phone is required'],
+        },
         role: {
             type: String,
             enum: ['manager', 'worker'],
             default: 'worker'
         }
+        
     }, 
     {timestamps: true}
 );

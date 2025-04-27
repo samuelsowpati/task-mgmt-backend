@@ -20,7 +20,8 @@ const loginFunc = async (req, res) => {
         const userResponse = {
             id: user._id,
             username: user.username,
-            role: user.role
+            role: user.role,
+            phone: user.phone
         };
         
         res.json(userResponse);
@@ -33,7 +34,7 @@ const loginFunc = async (req, res) => {
 //creating new user entry
 const registerFunc = async (req, res) => {
     try {
-        const { username, password, role } = req.body;
+        const { username, password, role, phone } = req.body;
         
         // Check if username already exists
         const existingUser = await User.findOne({ username });
@@ -41,12 +42,13 @@ const registerFunc = async (req, res) => {
             return res.status(400).json({ message: 'Username already exists' });
         }
         
-        const user = await User.create({ username, password, role });
+        const user = await User.create({ username, password, role, phone });
         
         res.status(201).json({
             id: user._id,
             username: user.username,
             role: user.role,
+            phone: user.phone,
             message: 'User created successfully'
         });
     } catch (error) {
